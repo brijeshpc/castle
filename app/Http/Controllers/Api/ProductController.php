@@ -103,13 +103,12 @@ class ProductController extends Controller
 					if($validation->fails())
 						return response()->json(['success' => 0,'statuscode'=> 401,'error' => $validation->errors()
 						], 401);
-					//$categoriesFor = Product::where('product_for',$postData['product_for'])
-									//->distinct('item_type')->get();
 					$categoriesFor = Product::where('product_for',"=",$postData['product_for'])
-                    ->select('item_type')->groupBy('item_type')->get();
+                    ->select('item_type')->groupBy('item_type')->take(3)->get();
 
-                    $allCategoriesFor = Product::where('product_for',"=",$postData['product_for'])
-                    ->select('item_type')->groupBy('item_type')->get();
+					$allCategoriesFor = Product::select('item_type')->groupBy('item_type')->get();
+
+                    //echo "<pre>"; print_r($allCategoriesFor); die;
 				
 					$categoryImages = array();
 
@@ -120,7 +119,7 @@ class ProductController extends Controller
 													"name" => ucfirst($category->item_type),
 													"image" => $category->item_type .".png" );
 						}
-						return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $categoriesFor, 'url' => $url], 200);
+						return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $categoriesFor, 'url' => $url, 'all_categories' => $allCategoriesFor], 200);
 					} else {
 						return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
 					}
