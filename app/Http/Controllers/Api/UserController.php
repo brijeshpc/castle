@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
 
-	//////// User SignUp   ////////////
 	public static function userSignUp(Request $request)
 	{
 		try{

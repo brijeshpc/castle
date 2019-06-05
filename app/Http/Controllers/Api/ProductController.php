@@ -11,6 +11,7 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Auth; 
 use App\User;
 use App\Product;
+use App\Wishlist;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -36,8 +37,6 @@ class ProductController extends Controller
     */
     public function listSections(Request $request)
     {
-		/*echo "Sections For";
-		die;*/
 		$user = Auth::user();
 		
 		if($user){	
@@ -107,9 +106,7 @@ class ProductController extends Controller
                     ->select('item_type')->groupBy('item_type')->take(3)->get();
 
 					$allCategoriesFor = Product::select('item_type')->groupBy('item_type')->get();
-
-                    //echo "<pre>"; print_r($allCategoriesFor); die;
-				
+		
 					$categoryImages = array();
 
 					if (!$categoriesFor->isEmpty()) { 
@@ -133,7 +130,10 @@ class ProductController extends Controller
 		}
 	}
 
-
+	/**
+     * list products according to product for and category type
+     * @return [json] 
+    */
 	public function listProducts(Request $request)
     {
 		try{
@@ -154,6 +154,253 @@ class ProductController extends Controller
 			return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
 		}
 	}
+
+
+	/**
+     * get product detail
+     * @return [json] 
+    */
+	public function productDetail(Request $request)
+    {
+		try{
+			$postData = $request->all();
+
+			$products = Product::where('id','=',$postData['product_id'])
+			->get();
+
+			if (!$products->isEmpty()) {
+				return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $products], 200);
+			} else {
+				return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
+			}
+		} catch(\Exception $e){
+			return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+		}
+	}
+
+	/**
+     * get all categories
+     * @return [json] 
+    */
+	public function categories(Request $request)
+    {
+ 		try{
+				$categories = Product::select('item_type')->groupBy('item_type')->get();
+				if (!$categories->isEmpty()) { 
+					return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $categories], 200);
+				} else {
+					return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
+				}
+			} catch (\Exception $e){
+			return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+			}
+	}
+
+	/**
+     * get all brands
+     *
+     * @return [json] 
+    */
+	public function brands(Request $request)
+    {
+ 		try{
+				$brands = Product::select('brand_name')
+							->groupBy('brand_name')
+							->where('product_for','=','exclusive')
+							->get();
+
+				if (!$brands->isEmpty()) { 
+					return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $brands], 200);
+				} else {
+					return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
+				}
+			} catch (\Exception $e){
+			return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+			}
+	}
+
+	/**
+     * get all products for a category
+     *
+     * @return [json] 
+    */
+	public function categoryProducts(Request $request)
+    {
+ 		try{
+			$postData = $request->all();
+			$brandArray = $postData["category_names"];
+			$products = Product::whereIn('brand_name',$brandArray)
+			->get();
+
+			if (!$products->isEmpty()) {
+				return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $products], 200);
+			} else {
+				return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
+			}
+		} catch(\Exception $e){
+			return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+		}
+	}
+
+	/**
+     * get all products for a brand
+     *
+     * @return [json] 
+    */
+	public function brandProducts(Request $request)
+    {
+ 		try{
+			$postData = $request->all();
+			$brandArray = $postData["brand_names"];
+			$products = Product::whereIn('brand_name',$brandArray)
+			->get();
+
+			if (!$products->isEmpty()) {
+				return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $products], 200);
+			} else {
+				return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
+			}
+		} catch(\Exception $e){
+			return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+		}
+	}
+
+
+	/**
+     * add products to wishlist
+     * @return [json] 
+    */
+	public function addWishlist(Request $request)
+    {
+    	$user = Auth::user();
+    	if($user){
+    		try{
+		    		$postData = $request->all();
+
+					if(isset($postData) && !empty($postData)){
+
+						$validation = Validator::make($postData, [
+							'product_id' => 'bail|required|max:255',
+						]);
+
+						if($validation->fails())
+							return response()->json(['success' => 0,'statuscode'=> 401,'error' => $validation->errors()
+							], 401);
+
+						$wishList = new Wishlist;
+
+						$wishlistExist = Wishlist::where("product_id","=",$postData['product_id'])->get();
+
+
+						if ($wishlistExist->isEmpty()) {
+							
+							$wishList->user_id = $user->id;
+							$wishList->product_id = $postData['product_id'];
+
+							 if($wishList->save()){
+			                	return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $wishList],200);
+
+				            } else {
+				            	return response()->json(['success' => 0,'statuscode'=> 401,'error' => "Not added."
+								], 401);
+				            }
+						} else{
+							return response()->json(['success' => 0, 'statuscode' => 200, 'error' => "Already exists."],200);
+						}
+			    	} else {
+			    		return response()->json(['success' => 0,'statuscode'=> 401,'error' => "Required values are not set" 
+								], 401);
+			    	}
+
+		   		} catch(\Exception $e){
+				return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+			}
+		}
+   	}
+
+
+   	/**
+     * add products to wishlist
+     * @return [json] 
+    */
+	public function removeWishlist(Request $request)
+    {
+    	
+    	$user = Auth::user();
+    	if($user){
+    		try{
+		    		$postData = $request->all();
+		    		$userId = $user->id;
+
+					if(isset($postData) && !empty($postData)){
+
+						$validation = Validator::make($postData, [
+							'product_id' => 'bail|required|max:255',
+						]);
+
+						if($validation->fails())
+							return response()->json(['success' => 0,'statuscode'=> 401,'error' => $validation->errors()
+							], 401);
+
+						$deleteWistList = Wishlist::where('user_id','=', $userId)->where('product_id','=',$postData['product_id'])->delete();
+
+						if($deleteWistList){
+							return response()->json(['success' => 1, 'statuscode' => 200, 'data' => "Product removed from wishlist."],200);
+						} else {
+								return response()->json(['success' => 0, 'statuscode' => 200, 'data' => "Product did not get removed from wishlist."],200);
+						}
+					} else {
+				    		return response()->json(['success' => 0,'statuscode'=> 401,'error' => "Required values are not set" 
+									], 401);
+				    }
+
+			   	} catch(\Exception $e){
+					return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+			}
+		}
+   	}
+
+   	/**
+     * list products according to product for and category type
+     * @return [json] 
+    */
+	public function castleExclusive(Request $request)
+    {
+		try{
+			$products = Product::where('product_for','=',"exclusive")
+			->get();
+
+			if (!$products->isEmpty()) {
+				return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $products], 200);
+			} else {
+				return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
+			}
+		} catch(\Exception $e){
+			return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+		}
+	}
+
+
+	/**
+     * list products according to product for and category type
+     * @return [json] 
+    */
+	/*public function exclusiveBrands(Request $request)
+    {
+		try{
+			$products = Product::where('product_for','=',"exclusive")
+			->get();
+
+			if (!$products->isEmpty()) {
+				return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $products], 200);
+			} else {
+				return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
+			}
+		} catch(\Exception $e){
+			return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+		}
+	}*/
+
 
 
 }

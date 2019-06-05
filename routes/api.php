@@ -23,11 +23,24 @@ Route::group(['prefix'=>'v1','namespace'=>'Api'],function () {
 	Route::get('/update-profile', ['as'=>'details', 'uses'=>'UserController@updateProfile']);
 
 	// api routes for Product Controller
-	// Route::get('/list-sections', ['as'=>'list-sections', 'uses'=>'ProductController@listSections']);
+	Route::get('/list-sections', ['as'=>'list-sections', 'uses'=>'ProductController@listSections']);
 	Route::post('/section-categories', ['as'=>'section-categories', 'uses'=>'ProductController@sectionCategories']);
 	Route::get('/slider-images', ['as'=>'slider-images', 'uses'=>'ProductController@sliderImages']);
 
 	Route::post('/list-products', ['as'=>'list-products', 'uses'=>'ProductController@listProducts']);
+
+	Route::post('/product-detail', ['as'=>'product-detail', 'uses'=>'ProductController@productDetail']);
+
+	Route::get('/categories', ['as'=>'categories', 'uses'=>'ProductController@categories']);
+
+	Route::get('/brands', ['as'=>'categories', 'uses'=>'ProductController@brands']);
+
+	Route::get('/brand-products', ['as'=>'brand-products', 'uses'=>'ProductController@brandProducts']);
+
+	Route::get('/category-products', ['as'=>'brand-products', 'uses'=>'ProductController@categoryProducts']);
+
+	Route::get('/castle-exclusive', ['as'=>'castle-exclusive', 'uses'=>'ProductController@castleExclusive']);
+
 });
 
 Route::group(['prefix'=>'v1','namespace'=>'Api', 'middleware' => ['apiauth:api']],function () {
@@ -35,7 +48,10 @@ Route::group(['prefix'=>'v1','namespace'=>'Api', 'middleware' => ['apiauth:api']
 	Route::post('/update-profile', ['as'=>'update-profile', 'uses'=>'UserController@updateProfile']);
 	Route::post('/get-profile', ['as'=>'get-profile', 'uses'=>'UserController@getProfile']);
 	Route::post('/avatar', ['as'=>'avatar', 'uses'=>'UserController@avatar']);
+	Route::post('/add-wishlist', ['as'=>'categories', 'uses'=>'ProductController@addWishlist']);
+	Route::post('/remove-wishlist', ['as'=>'categories', 'uses'=>'ProductController@removeWishlist']);
 });
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
