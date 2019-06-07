@@ -20,7 +20,6 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password','access_token',
-        'email',
         'password',
         'facebook_id',
         'gmail_id',
@@ -47,7 +46,9 @@ class User extends Authenticatable
 
 
     public static function createNewUser($data)
-    {   
+    {       
+            //echo "<pre>"; print_r($data); die;
+
             $user = new User();
             $user->email = isset($data['email']) ? $data['email'] : ''; 
             $user->password = isset($data['password']) ? Hash::make($data['password']) : '';
@@ -59,7 +60,9 @@ class User extends Authenticatable
             $user->updated_at = new \DateTime;
 
             $userData = array();
+
             if($user->save()){
+
                 $accessToken =  $user->createToken('MyApp')->accessToken; 
                 $userData = array('token' => $accessToken, 'user' => $user);
             }

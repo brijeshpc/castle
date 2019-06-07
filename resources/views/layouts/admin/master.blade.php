@@ -30,6 +30,10 @@
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="{{ asset('/public/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
 
+  <link rel="stylesheet" href="{{ asset('/public/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('/public/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -177,7 +181,13 @@
 
         <li>
           <a href="{{ url('/slider/') }}">
-            <i class="fa fa-th"></i> <span>Slider</span>
+            <i class="fa fa-th"></i> <span>Banner</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="{{ url('/slider/') }}">
+            <i class="fa fa-th"></i> <span>Promotion</span>
           </a>
         </li>
       
@@ -285,6 +295,19 @@
       <div class="row">
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3></h3>
+                <p>Users</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="{{ url('/user') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
               <h3></h3>
@@ -301,7 +324,20 @@
           <div class="small-box bg-green">
             <div class="inner">
               <h3></h3>
-                <p>Slider</p>
+                <p>Banner</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="{{ url('/slider') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-orange">
+            <div class="inner">
+              <h3></h3>
+                <p>Promotion</p>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -319,9 +355,9 @@
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>Version</b> 2.4.0
+      <!-- <b>Version</b> 2.4.0 -->
     </div>
-    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
+    <strong>Copyright &copy; 2019 <a href="https://adminlte.io">Castle MegaStore</a>.</strong> All rights
     reserved.
   </footer>
 
@@ -558,5 +594,31 @@
 <script src="{{ asset('/public/dist/js/pages/dashboard.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('/public/dist/js/demo.js') }}"></script>
+
+<!-- DataTables -->
+<script src="{{ asset('/public/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('/public/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+<!-- SlimScroll -->
+<script src="{{ asset('/public/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
+<!-- FastClick -->
+<script src="{{ asset('/public/bower_components/fastclick/lib/fastclick.js') }}../../bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+
+<script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+</script> 
+
+
+
 </body>
 </html>

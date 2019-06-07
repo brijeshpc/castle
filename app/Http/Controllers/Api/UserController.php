@@ -40,6 +40,7 @@ class UserController extends Controller
 							if(isset($postData['gmail_id']) && !empty($postData['gmail_id'])){
 								$validation = Validator::make($postData, [
 									'gmail_id' => 'bail|required|unique:users|max:255',
+									'email' => 'bail|required',
 								]);
 
 								if($validation->fails())
@@ -52,6 +53,7 @@ class UserController extends Controller
 
 								$validation = Validator::make($postData, [
 									'facebook_id' => 'bail|required|unique:users|max:255',
+									'email' => 'bail|required'
 								]);
 								if($validation->fails())
 									return response()->json(['success' => 0,'statuscode'=> 401,'error' => $validation->errors()
@@ -268,7 +270,7 @@ class UserController extends Controller
 			            $user->city = isset($postData['city']) ? $postData['city'] : '';
 			            $user->country = isset($postData['country']) ? $postData['country'] : '';
 			            $user->state = isset($postData['state']) ? $postData['state'] : '';
-			            $user->zip = isset($postData['zip']) ? $postData['zip'] : '';
+			            
 
 			            if($user->save()){
 			            	//$url = env('PUBLIC_URL')."storage/app/public/avatars/".$user->avatar;

@@ -24,7 +24,12 @@ Route::get('downloadExcel/{type}', 'ProductController@downloadExcel');
 Route::post('importExcel', 'ProductController@importExcel');
 
 Route::get('slider', 'SliderController@index');
+Route::get('user', 'UserController@index');
 Route::post('image-gallery', 'SliderController@upload');
 Route::delete('image-gallery/{id}', 'SliderController@destroy');
+
+Route::post('update-profile', 'UserController@updateProfile');
+Route::get('edit-profile/{id}', 'UserController@editProfile');
+
 
 

@@ -26,7 +26,7 @@
                         </li>
                         <li class="user-footer">
                             <div class="pull-right">
-                                <a href="" class="btn btn-default">Sign out</a>
+                                <a href="" class="btn btn-default">Update Profile</a>
                             </div>
                         </li>
                     </ul>

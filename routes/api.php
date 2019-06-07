@@ -37,7 +37,7 @@ Route::group(['prefix'=>'v1','namespace'=>'Api'],function () {
 
 	Route::get('/brand-products', ['as'=>'brand-products', 'uses'=>'ProductController@brandProducts']);
 
-	Route::get('/category-products', ['as'=>'brand-products', 'uses'=>'ProductController@categoryProducts']);
+	Route::post('/category-products', ['as'=>'brand-products', 'uses'=>'ProductController@categoryProducts']);
 
 	Route::get('/castle-exclusive', ['as'=>'castle-exclusive', 'uses'=>'ProductController@castleExclusive']);
 

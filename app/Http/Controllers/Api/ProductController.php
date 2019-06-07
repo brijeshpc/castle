@@ -316,7 +316,7 @@ class ProductController extends Controller
 				return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
 			}
 		}
-   	}
+   	}	
 
 
    	/**
@@ -367,7 +367,7 @@ class ProductController extends Controller
 	public function castleExclusive(Request $request)
     {
 		try{
-			$products = Product::where('product_for','=',"exclusive")
+			$products = Product::where('exclusive','=',1)
 			->get();
 
 			if (!$products->isEmpty()) {
