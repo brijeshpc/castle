@@ -28,7 +28,9 @@ class SliderController extends Controller
      */
     public function upload(Request $request)
     {
+        
         $this->validate($request, [
+            'page'  => 'required',
             'title' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -37,6 +39,8 @@ class SliderController extends Controller
         $request->image->move(public_path('images'), $input['image']);
 
         $input['title'] = $request->title;
+        $input['page'] = $request->page;
+
         Slider::create($input);
         return back()
             ->with('success','Image Uploaded successfully.');

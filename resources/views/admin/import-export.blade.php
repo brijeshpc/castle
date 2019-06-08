@@ -12,9 +12,11 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
+        <a href="{{ asset('/storage/app/public/download/products.xls') }}"><button class="btn btn-primary">Download Sample Excel xls</button></a>
         <form role="form" action="{{ url('importExcel') }}" method="post" enctype="multipart/form-data" >
           @csrf
           <div class="box-body">
+
             <div class="form-group">
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -32,13 +34,14 @@
                         <p>{{ Session::get('success') }}</p>
                     </div>
                 @endif
+              
               <label for="exampleInputFile">File Input</label>
               <input type="file" name = "import_file" id="exampleInputFile">
             </div>
         </div>
           <!-- /.box-body -->
          <div class="box-footer">
-            <button type="submit" class="btn btn-primary">Upload</button>
+            <button type="submit" class="btn btn-success">Upload</button>
         </div>
     </form>
 </div>

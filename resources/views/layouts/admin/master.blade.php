@@ -101,7 +101,7 @@
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="{{ url('/home') }}" class="logo">
+    <a href="{{ url('/admin/dashboard') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>C</b>TL</span>
       <!-- logo for regular state and mobile devices -->
@@ -123,7 +123,7 @@
       
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="{{ url('/home') }}" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="{{ url('/admin/dashboard') }}" class="dropdown-toggle" data-toggle="dropdown">
               <img src="{{ asset('/public/dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
               <span class="hidden-xs">Castle Administrator</span>
             </a>
@@ -131,21 +131,26 @@
               <!-- User image -->
               <li class="user-header">
                 <img src="{{ asset('/public/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
-                <p>Castle Administrator - Web Developer
-                  <small>Member since Nov. 2012</small>
+                <p>Castle Administrator
+                  <small>Member since, 2019</small>
                 </p>
               </li>
               <!-- Menu Body -->
 
               <!-- Menu Footer-->
               <li class="user-footer">
-                <!-- <div class="pull-left">
+                  <!-- <div class="pull-left">
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
-                </div> -->
-                <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                </div>
+                 </div> -->
+                  <div class="pull-right">
+                      <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                      document.getElementById('logout-form').submit(); class="btn btn-default btn-flat">Sign out</a>
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                      </form>
+                  </div>
               </li>
+              
             </ul>
           </li>
           <!-- Control Sidebar Toggle Button -->
@@ -165,7 +170,7 @@
         </div>
         <div class="pull-left info">
           <p>Castle Administrator</p>
-          <a href="{{ url('/home') }}"><i class="fa fa-circle text-success"></i> Online</a>
+          <a href="{{ url('/admin/dashboard') }}"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
       
@@ -173,107 +178,49 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
 
-        <li>
+        <!-- <li>
           <a href="{{ url('/import-export/') }}">
             <i class="fa fa-th"></i> <span>Product Import</span>
           </a>
+        </li> -->
+
+        <li>
+          <a href="{{ url('/user/') }}">
+            <i class="fa fa-th"></i> <span>Users </span>
+          </a>
+        </li>
+
+        <!-- <li class="treeview">
+          <a href="#">
+            <i class="fa fa-edit"></i> <span>Products </span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{ url('/product') }}"><i class="fa fa-circle-o"></i> View Products </a></li>
+            <li><a href="{{ asset('/public/pages/forms/advanced.html') }}"><i class="fa fa-circle-o"></i> Import Products </a></li>
+          </ul>
+        </li> -->
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-edit"></i> <span>Products </span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{ url('/product') }}"><i class="fa fa-circle-o"></i> View Products </a></li>
+            <li><a href="{{ url('/import-export/') }}"><i class="fa fa-circle-o"></i> Import Products </a></li>
+          </ul>
         </li>
 
         <li>
           <a href="{{ url('/slider/') }}">
-            <i class="fa fa-th"></i> <span>Banner</span>
+            <i class="fa fa-th"></i> <span>Banners / Promotions </span>
           </a>
         </li>
-
-        <li>
-          <a href="{{ url('/slider/') }}">
-            <i class="fa fa-th"></i> <span>Promotion</span>
-          </a>
-        </li>
-      
-        
-        <!-- <li class="treeview">
-          <a href="#">
-            <i class="fa fa-edit"></i> <span>Forms</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="{{ asset('/public/pages/forms/general.html') }}"><i class="fa fa-circle-o"></i> General Elements</a></li>
-            <li><a href="{{ asset('/public/pages/forms/advanced.html') }}"><i class="fa fa-circle-o"></i> Advanced Elements</a></li>
-            <li><a href="{{ asset('/public/pages/forms/editors.html') }}"><i class="fa fa-circle-o"></i> Editors</a></li>
-          </ul>
-        </li> -->
-
-        <!-- <li class="treeview">
-          <a href="#">
-            <i class="fa fa-table"></i> <span>Tables</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="{{ asset('/public/pages/tables/simple.html') }}"><i class="fa fa-circle-o"></i> Simple tables</a></li>
-            <li><a href="{{ asset('/public/pages/tables/data.html') }}"><i class="fa fa-circle-o"></i> Data tables</a></li>
-          </ul>
-        </li> -->
-        
-        
-        <!-- <li class="treeview">
-          <a href="#">
-            <i class="fa fa-folder"></i> <span>Examples</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="{{ asset('/public/pages/examples/invoice.html') }}"><i class="fa fa-circle-o"></i> Invoice</a></li>
-            <li><a href="{{ asset('/public/pages/examples/profile.html') }}"><i class="fa fa-circle-o"></i> Profile</a></li>
-            <li><a href="{{ asset('/public/pages/examples/login.html') }}"><i class="fa fa-circle-o"></i> Login</a></li>
-            <li><a href="{{ asset('/public/pages/examples/register.html') }}"><i class="fa fa-circle-o"></i> Register</a></li>
-            <li><a href="{{ asset('/public/pages/examples/lockscreen.html') }}"><i class="fa fa-circle-o"></i> Lockscreen</a></li>
-            <li><a href="{{ asset('/public/pages/examples/404.html') }}"><i class="fa fa-circle-o"></i> 404 Error</a></li>
-            <li><a href="{{ asset('/public/pages/examples/500.html') }}"><i class="fa fa-circle-o"></i> 500 Error</a></li>
-            <li><a href="{{ asset('/public/pages/examples/blank.html') }}"><i class="fa fa-circle-o"></i> Blank Page</a></li>
-            <li><a href="{{ asset('/public/pages/examples/pace.html') }}"><i class="fa fa-circle-o"></i> Pace Page</a></li>
-          </ul>
-        </li> -->
-        <!-- <li class="treeview">
-          <a href="#">
-            <i class="fa fa-share"></i> <span>Multilevel</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-            <li class="treeview">
-              <a href="#"><i class="fa fa-circle-o"></i> Level One
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
-                <li class="treeview">
-                  <a href="#"><i class="fa fa-circle-o"></i> Level Two
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-                  <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
-          </ul>
-        </li> -->
-        
-        
       </ul>
     </section>
     <!-- /.sidebar -->
@@ -324,7 +271,7 @@
           <div class="small-box bg-green">
             <div class="inner">
               <h3></h3>
-                <p>Banner</p>
+                <p>Banner / Promotion</p>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -332,19 +279,7 @@
             <a href="{{ url('/slider') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-orange">
-            <div class="inner">
-              <h3></h3>
-                <p>Promotion</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="{{ url('/slider') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
+        
       </div>
 
       @yield('content')
@@ -601,24 +536,35 @@
 <!-- SlimScroll -->
 <script src="{{ asset('/public/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
 <!-- FastClick -->
-<script src="{{ asset('/public/bower_components/fastclick/lib/fastclick.js') }}../../bower_components/fastclick/lib/fastclick.js"></script>
+<script src="{{ asset('/public/bower_components/fastclick/lib/fastclick.js') }}"></script>
+
+<!-- <script src="{{ asset('/public/bower_components/select2/dist/js/select2.full.min.js') }}"></script> -->
 <!-- AdminLTE App -->
 
 <script>
   $(function () {
-    $('#example1').DataTable()
+    $('#example1').DataTable(
+      {
+        'paging'      : true,
+        'lengthChange': false,
+        'searching'   : false,
+        'ordering'    : true,
+        'info'        : true,
+        'autoWidth'   : false,
+        "scrollX"     : true
+
+     })
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
       'searching'   : false,
       'ordering'    : true,
       'info'        : true,
-      'autoWidth'   : false
+      'autoWidth'   : false,
+      "scrollX"     : true
     })
   })
 </script> 
-
-
 
 </body>
 </html>

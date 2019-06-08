@@ -227,9 +227,11 @@ class ProductController extends Controller
 	public function categoryProducts(Request $request)
     {
  		try{
+
 			$postData = $request->all();
-			$brandArray = $postData["category_names"];
-			$products = Product::whereIn('brand_name',$brandArray)
+			$categoryArray = $postData["category_names"];
+
+			$products = Product::whereIn('item_type',$categoryArray)
 			->get();
 
 			if (!$products->isEmpty()) {

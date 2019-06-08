@@ -1,24 +1,41 @@
 @extends('layouts.admin.master')
 
 @section('content')
-
 <div class="row">
     <!-- left column -->
     <div class="col-md-12">
         <!-- general form elements -->
         <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">Import Products</h3>
-        </div>
-        <!-- /.box-header -->
-        <!-- form start -->
-        <form role="form" action="{{ url('update-profile') }}" method="post" enctype="multipart/form-data" >
-          @csrf
-          <div class="box-body">
-            <div class="form-group">
-                @if ($errors->any())
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <style type="text/css">
+            .gallery
+            {
+                display: inline-block;
+                margin-top: 20px;
+            }
+            .close-icon{
+                border-radius: 50%;
+                position: absolute;
+                right: 5px;
+                top: -10px;
+                padding: 5px 8px;
+            }
+            .form-image-upload{
+                background: #e8e8e8 none repeat scroll 0 0;
+                padding: 15px;
+            }
+        </style>
+        <h3 class="box-title">Update User</h3>
+            <form action="{{ url('update-profile') }}" class="form-image-upload" method="POST" enctype="multipart/form-data">
+                {!! csrf_field() !!}
+
+                @if (count($errors) > 0)
                     <div class="alert alert-danger">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -26,38 +43,60 @@
                         </ul>
                     </div>
                 @endif
-                @if (Session::has('success'))
-                    <div class="alert alert-success">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                        <p>{{ Session::get('success') }}</p>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>First Name:</strong>
+                        <input type="text" name = "first_name" id="first_name" value="{{ $user->first_name }}" class="form-control" placeholder="First Name">
                     </div>
-                @endif
 
-              <label for="exampleInputFile">First Name</label>
-              <input type="text" name = "first_name" id="first_name" value="{{ $user->first_name }}">
+                    <div class="col-md-6">
+                        <strong>Last Name:</strong>
+                        <input type="text" name = "last_name" id="last_name" value="{{ $user->last_name }}" class="form-control" placeholder="Last Name">
+                    </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>City:</strong>
+                        <input type="text" name = "city" id="city" value="{{ $user->city }}" class="form-control" placeholder="City">
+                    </div>
 
-              <label for="exampleInputFile">Last Name</label>
-              <input type="text" name = "last_name" id="last_name" value="{{ $user->last_name }}">
-
-              <label for="exampleInputFile">City</label>
-              <input type="text" name = "city" id="city" value="{{ $user->city }}">
-
-              <label for="exampleInputFile">State</label>
-              <input type="text" name = "state" id="state" value="{{ $user->state }}">
-
-              <label for="exampleInputFile">Zip</label>
-              <input type="number" name = "zip" id="zip" value="{{ $user->zip }}">
-
-              <input type="hidden" name = "id" id="zip" value="{{ $user->id }}">
-
+                    <div class="col-md-6">
+                        <strong>State:</strong>
+                        <input type="text" name = "state" id="state" value="{{ $user->state }}" class="form-control" placeholder="State">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Zip:</strong>
+                        <input type="text" name = "zip" id="city" value="{{ $user->zip }}" class="form-control" placeholder="Zip">
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Email:</strong>
+                        <input type="text" disabled="disabled" name = "email" id="email" value="{{ $user->email }}" class="form-control" placeholder="Email">
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="hidden" name = "id" id="zip" value="{{ $user->id }}">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </div>
+                
+            </form>
             </div>
         </div>
-          <!-- /.box-body -->
-         <div class="box-footer">
-            <button type="submit" class="btn btn-primary">Upload</button>
-        </div>
-    </form>
+    </div>
 </div>
-          <!-- /.box -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".fancybox").fancybox({
+                openEffect: "none",
+                closeEffect: "none"
+            });
+        });
+    </script>
 @endsection
+
+

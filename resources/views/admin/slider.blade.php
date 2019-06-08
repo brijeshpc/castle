@@ -44,6 +44,17 @@
                 @endif
 
                 <div class="row">
+
+                    <div class="col-md-5">
+                        <strong>Select Page:</strong>
+                        <select name="page" class="form-control" style="width: 100%;">
+                              <option value="">Select Page</option>
+                              <option value="home" >Home</option>
+                              <option value="promotions" >Promotions</option>
+                        </select>
+                        <!-- <input type="text" name="title" class="form-control" placeholder="Title"> -->
+                    </div>
+
                     <div class="col-md-5">
                         <strong>Title:</strong>
                         <input type="text" name="title" class="form-control" placeholder="Title">
@@ -71,6 +82,9 @@
                         @foreach($images as $image)
                         <div class='main-section'>
                             <div class="title">
+                            <h2 class='text-muted'>{{ $image->page }}</h2>
+                            </div>
+                            <div class="title">
                             <h2 class='text-muted'>{{ $image->title }}</h2>
                             </div>
                             <div class="image">
@@ -92,14 +106,14 @@
         </div>
     </div>
 </div>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $(".fancybox").fancybox({
-                openEffect: "none",
-                closeEffect: "none"
-            });
-        });
-    </script>
+<!--  <script type="text/javascript">
+$(document).ready(function(){
+    $(".fancybox").fancybox({
+        openEffect: "none",
+        closeEffect: "none"
+    });
+});
+</script> -->
 @endsection
 
 

@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Slider;
 use App\User;
 
+
 class UserController extends Controller
 {
+
     /**
      * Create a new controller instance.
      *
@@ -47,8 +49,31 @@ class UserController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function deleteProfile(Request $request, $userId = null)
+    {
+        $user = User::find($userId)->delete();
+        $users = User::get();
+        return view('admin/user',compact('users'));
+    }
+
+
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
     public function updateProfile(Request $request)
     {
+
+        $this->validate($request, [
+            'first_name'  => 'required',
+            'last_name' => 'required',
+            'zip'  => 'required',
+            'city' => 'required',
+            'state'  => 'required'
+        ]);
+
         $postData = $request->all();
         if(isset($postData) && !empty($postData)){
             $userId = $postData['id'];

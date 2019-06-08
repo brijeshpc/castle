@@ -10,6 +10,7 @@ class Slider extends Model
     protected $table = 'sliders';
     //
     protected $fillable = [
+    	'page',
         'title',
         'image',
         'sort_order',

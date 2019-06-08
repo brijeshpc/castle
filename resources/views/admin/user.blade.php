@@ -17,7 +17,7 @@
               <div class="box">
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="example2" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>SNo.</th>
@@ -42,7 +42,7 @@
                         <td>{{ isset($user->state) ? $user->state : 'Not Available' }}</td>
                         <td>{{ isset($user->gender) ? $user->gender : 'Not Available' }}</td>
                         <td>{{ $user->created_at }}</td>
-                        <td><a href="{{ url('/edit-profile/'.$user->id) }}" >Edit</a> <!-- <a href='' >Delete</a> --></td>
+                        <td><a href="{{ url('/edit-profile/'.$user->id) }}" >Edit</a><a href="{{ url('/delete-profile/'.$user->id) }}" >Delete</a></td>
                     </tr>
                    @endforeach
                 </tbody>
