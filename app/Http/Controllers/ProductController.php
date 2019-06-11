@@ -12,6 +12,16 @@ class ProductController extends Controller
 {
 
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
@@ -45,10 +55,11 @@ class ProductController extends Controller
     public function importExcel(Request $request) 
     {
         $request->validate([
-            'import_file' => 'required'
+            'import_file'   => 'required|mimes:xlsx,ods',
+            //'extension' => 'required|xlsx,xls,odt,ods,odp'
         ]);
         Excel::import(new ProductsImport,request()->file('import_file'));
         return back()
-            ->with('success','Products imported successfully.');
+            ->with('success','File Uploaded successfully.');
     }
 }

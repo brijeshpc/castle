@@ -162,19 +162,31 @@ class ProductController extends Controller
     */
 	public function productDetail(Request $request)
     {
-		try{
-			$postData = $request->all();
+    	$user = Auth::user();
+    	if($user){
+				try{
 
-			$products = Product::where('id','=',$postData['product_id'])
-			->get();
+					$postData = $request->all();
+					$product = Product::find($postData['product_id']);
 
-			if (!$products->isEmpty()) {
-				return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $products], 200);
-			} else {
-				return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
-			}
-		} catch(\Exception $e){
-			return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+					$wishlistProduct = Wishlist::where('product_id','=',$postData['product_id'])
+					->where('user_id','=',$user->id)
+					->get();
+
+					if (!$wishlistProduct->isEmpty()){
+						$wishList = 1;
+					} else {
+						$wishList = 0;
+					}
+
+					if ($product) {
+						return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $product, 'wishList' => $wishList], 200);
+					} else {
+						return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
+					}
+				} catch(\Exception $e){
+					return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+				}
 		}
 	}
 
@@ -206,7 +218,7 @@ class ProductController extends Controller
  		try{
 				$brands = Product::select('brand_name')
 							->groupBy('brand_name')
-							->where('product_for','=','exclusive')
+							->where('exclusive','=','1')
 							->get();
 
 				if (!$brands->isEmpty()) { 
@@ -291,7 +303,9 @@ class ProductController extends Controller
 
 						$wishList = new Wishlist;
 
-						$wishlistExist = Wishlist::where("product_id","=",$postData['product_id'])->get();
+						$wishlistExist = Wishlist::where("product_id","=",$postData['product_id'])
+									->where("user_id","=",$user->id)
+									->get();
 
 
 						if ($wishlistExist->isEmpty()) {
@@ -319,6 +333,67 @@ class ProductController extends Controller
 			}
 		}
    	}	
+
+
+   	/**
+     * add products to wishlist
+     * @return [json] 
+    */
+	public function getWishlist(Request $request)
+    {
+
+    	$user = Auth::user();
+    	if($user){
+    		//echo "Hello"; die;
+    		try{
+
+    				//$postData = $request->all();
+
+					//if(isset($postData) && !empty($postData)){
+
+						/*$validation = Validator::make($postData, [
+							'product_id' => 'bail|required|max:255',
+						]);
+*/
+						/*if($validation->fails())
+							return response()->json(['success' => 0,'statuscode'=> 401,'error' => $validation->errors()
+							], 401);
+*/
+						//$wishList = new Wishlist;
+
+						$wishlistExist = Wishlist::where("user_id","=",$user->id)->get();
+
+						//echo "<pre>"; print_r($wishlistExist); die;
+
+						$products = [];
+
+						if (!$wishlistExist->isEmpty()) {
+
+							foreach($wishlistExist as $wishList){
+								$productDetails = Product::find($wishList->product_id);
+								array_push($products,$productDetails);
+							}
+							
+		                	return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $products],200);
+
+				        } else {
+				            	return response()->json(['success' => 1,'statuscode'=> 401,'error' => "Empty."
+								], 401);
+				        }
+
+					//} /*else {
+			    		//return response()->json(['success' => 0,'statuscode'=> 401,'error' => "Required values are not set" 
+								//], 401);
+			    //}
+
+		   	} catch(\Exception $e){
+				return Response(array('success'=>0,'statuscode'=>500,'error'=>$e->getmessage()),500);
+			}
+		}
+	}
+		
+
+
 
 
    	/**

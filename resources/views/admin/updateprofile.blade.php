@@ -7,10 +7,6 @@
         <!-- general form elements -->
         <div class="box box-primary">
         <div class="box-header with-border">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
         <style type="text/css">
             .gallery
             {
@@ -79,8 +75,14 @@
                 </div><br>
                 <div class="row">
                     <div class="col-md-6">
+                        <strong>Gender:</strong>
+                        <input type="text" name = "gender" id="gender" value="{{ $user->gender }}" class="form-control" placeholder="gender">
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-6">
                         <input type="hidden" name = "id" id="zip" value="{{ $user->id }}">
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </div>
                 
@@ -89,14 +91,7 @@
         </div>
     </div>
 </div>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $(".fancybox").fancybox({
-                openEffect: "none",
-                closeEffect: "none"
-            });
-        });
-    </script>
+
 @endsection
 
 

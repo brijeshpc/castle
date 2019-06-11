@@ -8,52 +8,31 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Row;
 use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
+
 
 class ProductsImport implements ToModel
 {
+
+    use Importable;
     /**
     * @param array $row
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
 
-
-    /*public function collection(Collection $rows)
-    {   
-        $count = 0;
-        foreach ($rows as $row) 
-        {
-            $count ++;
-            if($count > 3){
-                echo "<pre>";
-                print_r($row);
-                echo "*******************************************************************"; 
-                echo "<br>";
-            }
-        }
-    }*/
-
-    
     public function model(array $row)
     {
         static $count = 0;
         $count ++;
-
-        if($count > 2){
-      
-            /*echo "<pre>"; 
-            print_r($row);
-            echo "*******************************************************************"; 
-            echo "<br>";*/  
-
-
-           /* if($row[0] == "" || $row[1] == "" || $row[2] == "" || $row[3] == "", $row[4] == "", $row[5] == "", $row[6] == "" || $row[7] == "" || $row[8] == "" || $row[9] == "", $row[10] == "", $row[11] == "", $row[12] == "" || $row[13] == "" || $row[14] == "" || $row[15] == "", $row[16] == "", $row[17] == "", $row[18] == "" || $row[19] == "" || $row[20] == "" || $row[21] == "", $row[22] == "", $row[23] == "" || $row[23] == ""){
-
-            }
-*/
-
-            return new Product([
-
+        if($count > 3){
+              return new Product([
                 'feed_product_type' => $row[0],
                 'item_sku' => $row[1],
                 'brand_name' => $row[2],
@@ -80,13 +59,9 @@ class ProductsImport implements ToModel
                 'color_name' => $row[23],
                 'is_adult_product' => $row[24]
             ]);
-            }
-}
-            public function rules(): array
-            {
-                return [
-                        'feed_product_type' => 'required'
-                    ];
-            }
 
+
+        }
+        
+    }
 }

@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
-use Validator, Hash, DateTime, Mail, DB;
+use Validator, Hash, DateTime, DB;
 use Carbon\Carbon;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Auth; 
 use App\User;
+use App\PasswordReset;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ForgotPasswordMail;
 
 class UserController extends Controller
 {
@@ -429,5 +432,120 @@ class UserController extends Controller
   		 	}
     	}
     }
+
+    /*
+		** for the forgot password
+	*/
+	public function forgotPassword(Request $request) {
+
+		/*echo "William";  
+		die;*/
+
+		$postData = $request->all();
+
+		$validation = Validator::make($postData, [
+			'email' => 'required'
+		]);
+
+		if($validation->fails())
+			return response()->json(['success' => 0,'error' => $validation->errors()
+		]);
+
+		// check for registered user
+		$user = User::where('email',$postData['email'])->first();
+
+		if($user){
+			
+			// generate random string
+			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			$length = 10;
+			$charactersLength = strlen($characters);
+			$randomString = '';
+			for ($i = 0; $i < $length; $i++) {
+				$randomString .= $characters[rand(0, $charactersLength - 1)];
+			}
+			$randomToken = $randomString;
+
+			// save data in the password_resets
+			$passwordReset = new PasswordReset;
+			$passwordReset->email = $user->email;
+			$passwordReset->token = $randomToken;
+			$passwordReset->save();
+
+
+			$resetPasswordLink = 'http://202.164.42.26:8282/castlesetup/password/reset'.'/'.$randomToken;
+
+			// set data that has to be sent in the eamil
+			/*$data = array(
+				'email' => $player->channel_id,
+				'token' => $randomToken,
+				'link'  => $resetPasswordLink,
+				'name'  => $player->username
+			);*/
+
+			// send mail //
+			/*Mail::send('emails.password.email', ['data' => $data], function ($m) use($data) {
+	            $m->from('raju@code-brew.com', 'Quiz');
+
+	        $passwordMail = Mail::to($user->email)->send(new RegisterMail($user->name,$request->get('user_type'),'')); */
+
+	        $email = "hello@gmail.com";
+
+	        Mail::to($email)->send(new ForgotPasswordMail($resetPasswordLink,$user->name));
+
+		} else {
+			return response()->json(['success' => 0,'statuscode'=> 401,'error' => "User not found"
+			]);
+		}
+	}
+
+
+
+	/*
+		** for the forgot password
+	*/
+	/*public function resetPassword(Request $request, $email, $token) {
+
+		$data = array(
+				'email' => $email,
+				'token' => $token
+			);
+		// check in the password reset table
+		$player = PasswordReset::where('email',$request['email'])
+					->where('token',$request['token'])
+					->first();
+		if($player) {
+			return view('emails.password.reset',['data' => $data]);
+		} else {
+			return view('emails.password.linkexpired');
+		}			
+	}
+*/
+	/*public function updatePassword(Request $request) {
+
+		// check in the password reset table
+		$player = PasswordReset::where('email',$request['email'])
+					->where('token',$request['token'])
+					->first();
+		if($player){
+
+			$getPlayer = Player::where('channel_id', $request['email'])->first();
+			
+			// update the password
+			$updatePlayer = Player::find($getPlayer->id);
+			$updatePlayer->password = Hash::make($request['password']);
+			$updatePlayer->save();
+
+			$deletedRows = PasswordReset::where('email', $request['email'])->delete();
+
+			//echo "Your password has been changed successfully.";
+			return view('emails.password.success');
+
+		}else{
+			return view('emails.password.linkexpired');
+		}
+		die;
+		// check for the required entry in the pasword reset table 
+	}*/
 
 }

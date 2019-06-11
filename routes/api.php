@@ -29,17 +29,22 @@ Route::group(['prefix'=>'v1','namespace'=>'Api'],function () {
 
 	Route::post('/list-products', ['as'=>'list-products', 'uses'=>'ProductController@listProducts']);
 
-	Route::post('/product-detail', ['as'=>'product-detail', 'uses'=>'ProductController@productDetail']);
+	
 
 	Route::get('/categories', ['as'=>'categories', 'uses'=>'ProductController@categories']);
 
 	Route::get('/brands', ['as'=>'categories', 'uses'=>'ProductController@brands']);
 
-	Route::get('/brand-products', ['as'=>'brand-products', 'uses'=>'ProductController@brandProducts']);
+	Route::post('/brand-products', ['as'=>'brand-products', 'uses'=>'ProductController@brandProducts']);
 
 	Route::post('/category-products', ['as'=>'category-products', 'uses'=>'ProductController@categoryProducts']);
 
 	Route::get('/castle-exclusive', ['as'=>'castle-exclusive', 'uses'=>'ProductController@castleExclusive']);
+
+	Route::post('/forgot-password', ['as'=>'forgot-password', 'uses'=>'UserController@forgotPassword']);
+
+	
+
 
 });
 
@@ -50,7 +55,13 @@ Route::group(['prefix'=>'v1','namespace'=>'Api', 'middleware' => ['apiauth:api']
 	Route::post('/avatar', ['as'=>'avatar', 'uses'=>'UserController@avatar']);
 	Route::post('/add-wishlist', ['as'=>'categories', 'uses'=>'ProductController@addWishlist']);
 	Route::post('/remove-wishlist', ['as'=>'categories', 'uses'=>'ProductController@removeWishlist']);
+	Route::post('/product-detail', ['as'=>'product-detail', 'uses'=>'ProductController@productDetail']);
+		Route::post('/get-wishlist', ['as'=>'get-wishlist', 'uses'=>'ProductController@getWishlist']);
 });
+
+
+
+
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

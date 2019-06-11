@@ -5,8 +5,8 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header"><center><h3 style="color:orange"><b>Castle Mega Store</b></h3></center></div>
-                <div class="card-header" style="color:orange"><b>{{ __('Register') }}</b></div>
+                <div class="card-header"><center><h3 style="color:#881465"><b>Castle Mega Store</b></h3></center></div>
+                <div class="card-header" style="color:#881465"><b>{{ __('Register') }}</b></div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">

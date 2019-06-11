@@ -6,7 +6,7 @@
     <!-- left column -->
     <div class="col-md-12">
         <div class="title m-b-md">
-            <b style="color:orange">Castle Mega Store</b>
+            <b style="color:#881465">Castle Mega Store</b>
         </div>
     </div>
 </div>
