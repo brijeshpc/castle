@@ -43,7 +43,7 @@ class UserController extends Controller
 							if(isset($postData['gmail_id']) && !empty($postData['gmail_id'])){
 								$validation = Validator::make($postData, [
 									'gmail_id' => 'bail|required|unique:users|max:255',
-									'email' => 'bail|required',
+									'email' => 'bail|required|unique:users|max:255',
 								]);
 
 								if($validation->fails())
@@ -56,7 +56,7 @@ class UserController extends Controller
 
 								$validation = Validator::make($postData, [
 									'facebook_id' => 'bail|required|unique:users|max:255',
-									'email' => 'bail|required'
+									'email' => 'bail|required|unique:users|max:255',
 								]);
 								if($validation->fails())
 									return response()->json(['success' => 0,'statuscode'=> 401,'error' => $validation->errors()
@@ -119,7 +119,7 @@ class UserController extends Controller
 
 							$validation = Validator::make($postData, [
 								'email' => 'bail|required|max:255',
-								'password' =>'bail|min:7|required_without_all:facebook_id,gmail_id',
+								'password' =>'bail|required',
 							]);
 							if($validation->fails())
 								return response()->json(['success' => 0,'statuscode'=> 401,'error' => $validation->errors()
@@ -299,69 +299,7 @@ class UserController extends Controller
    		return response()->json(['success' => 0,'statuscode'=> 401,'error' => "Token has not been set."], 401);
     }
 
-    public function avatar1(Request $request) {
-
-    	//echo "avatar"; die;
-		$this->validate($request, [
-			'avatar' => 'nullable|image|max:' . config('misc.avatar.filesize')
-		]);
-
-		//$player = Auth::guard('api')->user();
-
-		// new avatar uploaded
-		if ($file = $request->file('avatar')) {
-
-			list($w, $h) = explode('x', config('misc.avatar.resize'));
-
-			$path = storage_path('app/tmp') . DIRECTORY_SEPARATOR . $player->id . '-avatar.' . $file->extension();
-
-			$image = Image::make($file)->fit($w, $h, function ($constraint) {
-				$constraint->upsize();
-			});
-			$image->save($path);
-
-			Storage::put($player->id . '-avatar.jpg', file_get_contents($path));
-			Storage::disk('local')->delete('tmp/' . $player->id . '-avatar.' . $file->extension());
-
-			$player->avatar = 1;
-		}
-		// user wants to remove avatar
-		else {
-			if ($player->avatar == 1) {
-				Storage::delete($player->id . '-avatar.jpg');
-			}
-			$player->avatar = null;
-		}
-
-		$player->save();
-		
-		// re-create token, because username has to be presented in it
-		if (!$token = Auth::guard('api')->claims([
-					'id' => $player->id,
-					'username' => $player->username,
-					'avatar' => $player->avatarUrl,
-				])->login($player)) {
-
-			return response()->json(['errors' => [__('api.error-login-failed')]], 422);
-		}
-
-		return response()->json(['token' => $token, 'avatar' => $player->avatarUrl]);
-	}
-
-	/*public function avatar(Request $request) {
-	 	$user = Auth::user();
-    	$postData = $request->all();
-
-	 	if ($file = $postData['avatar']) {
-			$fileName = "avatar_".$user->id;
-			$data = $postData['avatar'];
-			$data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data));
-			$upload_success = Storage::disk('public')->put('avatars/' . $fileName, $data);
-			return response()->json(['avatar' => "avatar uploaded successfully."]);
-		}
-
-	}*/
-
+    
 	public function avatar(Request $request) {
 
 	 	$user = Auth::user();
@@ -388,10 +326,12 @@ class UserController extends Controller
 
     				if(Storage::disk('public')->put('avatars/' . $imageName, $data)){
 						$user = User::find($user->id);
-			            $user->avatar = isset($postData['avatar']) ? $imageName : '';
+			            $getAvatar = isset($postData['avatar']) ? $imageName : '';
+			            $finalImageUrl = env('STORAGE_URL')."app/public/avatars/".$getAvatar;
+			            $user->avatar = $finalImageUrl;
 			            if($user->save()){
 				            	$url = env('STORAGE_URL')."app/public/avatars/";
-			                	return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $user, 'url' => $url], 200);
+			                	return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $user, 'url' => $finalImageUrl], 200);
 				        }
 					} else {
 						return response()->json(['success' => 0, 'statuscode' => 200, 'error' => "Avatar upload failed."],200);
@@ -421,7 +361,7 @@ class UserController extends Controller
 
 					if($user){
 						$url = env('STORAGE_URL')."app/public/avatars/";
-			            return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $user, 'url' => $url], 200);
+			            return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $user, 'url' => $url, 'google_facebook'], 200);
 			        }
 
 	            	return response()->json(['success' => 0,'statuscode'=> 401,'error' => "Updation failed"
@@ -492,8 +432,10 @@ class UserController extends Controller
 	        $email = "hello@gmail.com";
 
 	        Mail::to($email)->send(new ForgotPasswordMail($resetPasswordLink,$user->name));
-
+	        return response()->json(['success' => 1,'statuscode'=> 200,'data' => "Email sent successfully"
+			]);
 		} else {
+
 			return response()->json(['success' => 0,'statuscode'=> 401,'error' => "User not found"
 			]);
 		}

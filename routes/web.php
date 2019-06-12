@@ -38,6 +38,10 @@ Route::group(array('middleware' => 'auth'), function() {
 		Route::get('user', 'UserController@index');
 		Route::get('product', 'ProductController@index');
 		Route::post('image-gallery', 'SliderController@upload');
+
+		Route::post('view-gallery', 'SliderController@viewGallery');
+		Route::get('view-gallery', 'SliderController@defaultGallery');
+
 		Route::delete('image-gallery/{id}', 'SliderController@destroy');
 		Route::post('update-profile', 'UserController@updateProfile');
 		Route::get('edit-profile/{id}', 'UserController@editProfile');
@@ -45,7 +49,7 @@ Route::group(array('middleware' => 'auth'), function() {
 		
 	});
 
-Route::get('logout', 'Auth\LoginController@logout', function () {
+	Route::get('logout', 'Auth\LoginController@logout', function () {
 				return abort(404);
     	});
 

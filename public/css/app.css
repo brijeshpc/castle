@@ -19,10 +19,10 @@
     float: left;
     padding-right: 4%;
 }
-.title {
-	float: left;
-	width: 25%;
-	padding-right: 4%;
+.title-txt {
+    float: left;
+    width: 18%;
+    padding-right: 4%;
 }
 .main-section {
     width: 100%;
@@ -35,10 +35,14 @@ img.img-act {
 .list-gallery {
     margin-top: 50px;
     padding: 0 20px;
-    max-width: 750px;
+    max-width: 100%;
     margin: 0 auto;
+    float: left;
 }
 .text-muted {
     color: #000 !important;
     font-size: 18px;
+}
+.small-box .fa-arrow-circle-right:before {
+   display: none;
 }

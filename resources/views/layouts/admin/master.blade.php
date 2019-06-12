@@ -45,6 +45,11 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
   <style type="text/css">
+
+  .small-box .fa-arrow-circle-right:before {
+   display: none;
+}
+
     .image img.gallery-class.img-responsive {
       width: 100% !important;
     }
@@ -94,6 +99,16 @@
     .small-box>.inner {
       padding: 16px 10px;
     }
+    .selection-box select.form-control {
+    width: 20% !important;
+    float: left;
+}
+.small-box p {
+    font-size: 15px;
+    text-align: center;
+    padding-top: 11px;
+    margin-bottom: 0;
+}
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -260,7 +275,7 @@
             <div class="small-box bg-aqua">
               <div class="inner">
                 <h3></h3>
-                <p>Import Products</p>
+                <p>Products</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>

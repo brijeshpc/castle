@@ -15,6 +15,7 @@ use App\Wishlist;
 use Illuminate\Support\Facades\Storage;
 
 
+
 /*use App\Models\Admin;
 use App\Models\Category;
 use App\Models\User;
@@ -102,10 +103,11 @@ class ProductController extends Controller
 					if($validation->fails())
 						return response()->json(['success' => 0,'statuscode'=> 401,'error' => $validation->errors()
 						], 401);
+
 					$categoriesFor = Product::where('product_for',"=",$postData['product_for'])
                     ->select('item_type')->groupBy('item_type')->take(3)->get();
 
-					$allCategoriesFor = Product::select('item_type')->groupBy('item_type')->get();
+					$allCategoriesFor = Product::where('product_for',"=",$postData['product_for'])->select('item_type')->groupBy('item_type')->get();
 		
 					$categoryImages = array();
 
@@ -241,13 +243,31 @@ class ProductController extends Controller
  		try{
 
 			$postData = $request->all();
-			$categoryArray = $postData["category_names"];
 
+			$validation = Validator::make($postData, [
+				'page' => 'required',
+				'category_names' => 'required'
+			]);
+
+			if($validation->fails())
+			return response()->json(['success' => 0,'statuscode'=> 401,'error' => $validation->errors()
+			], 401);
+			$categoryArray = $postData["category_names"];
+			
+			// pagination arguments
+			$page = $postData["page"] != 0 ? $postData["page"] : 0;
+			$limit = 10;
+			$offset = $page * $limit;
 			$products = Product::whereIn('item_type',$categoryArray)
-			->get();
+			->offset($offset)
+            ->limit($limit)
+            ->get();
+
+            $totalProducts = Product::whereIn('item_type',$categoryArray)
+            ->count();
 
 			if (!$products->isEmpty()) {
-				return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $products], 200);
+				return response()->json(['success' => 1, 'statuscode' => 200, 'data' => $products, 'total_products' => $totalProducts], 200);
 			} else {
 				return Response(array('success' => 1, 'statuscode' => 500, 'error' => "No records found"),500);
 			}
@@ -266,7 +286,7 @@ class ProductController extends Controller
  		try{
 			$postData = $request->all();
 			$brandArray = $postData["brand_names"];
-			$products = Product::whereIn('brand_name',$brandArray)
+			$products = Product::where('exclusive','=',1)->whereIn('brand_name',$brandArray)
 			->get();
 
 			if (!$products->isEmpty()) {

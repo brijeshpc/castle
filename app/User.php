@@ -58,6 +58,8 @@ class User extends Authenticatable
             $user->gmail_id = isset($data['gmail_id']) ? $data['gmail_id'] : '';
             $user->timezone = new \DateTime;
             $user->type = 2;
+            $user->avatar = isset($data['photo']) ? $data['photo'] : ''; 
+            $user->first_name = isset($data['name']) ? $data['name'] : ''; 
             $user->created_at = new \DateTime;
             $user->updated_at = new \DateTime;
 
